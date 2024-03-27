@@ -12,12 +12,12 @@ void kernel32( void ) {
     // * Shouldn't load Kernel64 just yet
     // * Do a check of memory of SHA256
     // * Will be assigned during compilation
+    char c;
 
     // TODO: Create a SHA256 encoder
 
     // TODO: Post the message to quit switch64 for 3 seconds
 
     // TODO: Check if input = ESCAPE_CODE
-    unsigned char scancode = port_byte_in(0x60);
-    if()
+    if(getc(&c) == 'i') 
 }   

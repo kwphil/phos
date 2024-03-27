@@ -1,6 +1,7 @@
 ; Available for change
 %assign KERNEL_SIZE 31            ; 0x1 - 0x80 (512 bytes to 40KiB)
-%assign BOOT_DRIVE 0              ; Just create a 
+%assign BOOT_DRIVE 0              ; Just create a basic drive
+%assign KERNEL32_STACK 0x90000    ; Where the stack is located when initing prot
 
 [bits 16]                         ; BITS = 16
 org 0x7c00                        ; boot_offset = 0x7c00
@@ -68,8 +69,8 @@ sectors_error:
             jmp $
 
 print_hex:                        ; Since we are only using this once, do not need
-            mov  bx, HEX_OUT+2    ; Setting ptr to the 2nd 0 in HEX_OUT(0x0000)
-            mov  dl, 
+            mov  ax, HEX_OUT+2    ; Setting ptr to the 2nd 0 in HEX_OUT(0x0000)
+            mov  
             
 
 [bits 32]                         ; Now initing 32-bit mode
@@ -80,7 +81,7 @@ init_32:  mov  ax,  DATA_SEG      ; Updating seg registers
           mov  fs,  ax
           mov  gs,  ax
 
-          mov  ebp, 0x90000       ; Moving the stack up to 0x90000
+          mov  ebp, KERNEL32_STACK; Moving the stack up to 0x90000
           mov  esp, ebp
 begin_32: call KERNEL_OFFSET      ; Give control to kernel32
           jmp $                   ; Jump back if needed
