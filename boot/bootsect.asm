@@ -54,7 +54,8 @@ disk_error:
             int  0x10
             mov  al, 0x0d
             int  0x10
-            mov  dh, ah           ; Printing the code
+            xor  dx, dx           ; Clearing DX
+            mov  dl, ah           ; Printing the code
             call print_hex        ; Check error at http://stanislavs.org/helppc/int_13-1.html            
 
             hlt                   ; Stopping and
@@ -66,29 +67,10 @@ sectors_error:
             hlt
             jmp $
 
-; Not my code. https://github.com/cfenollosa/os-tutorial/blob/master/23-fixes/boot/print_hex.asm
-; receiving the data in 'dx'
-print_hex: 
-           pusha
-           mov cx, 0              ; our index variable
-hex_loop:  cmp cx, 4              ; loop 4 times
-           je end
-           mov ax, dx             ; we will use 'ax' as our working register
-           and ax, 0x000f         ; 0x1234 -> 0x0004 by masking first three to zeros
-           add al, 0x30           ; add 0x30 to N to convert it to ASCII "N"
-           cmp al, 0x39           ; if > 9, add extra 8 to represent 'A' to 'F'
-           jle step2
-           add al, 7              ; 'A' is ASCII 65 instead of 58, so 65-58=7
-step2:     mov bx, HEX_OUT + 5    ; base + length
-           sub bx, cx             ; our index variable
-           mov [bx], al           ; copy the ASCII char on 'al' to the position pointed by 'bx'
-           ror dx, 4              ; 0x1234 -> 0x4123 -> 0x3412 -> 0x2341 -> 0x1234
-           add cx, 1              ; increment index and loop
-           jmp hex_loop
-end:       mov bx, HEX_OUT
-           call print
-           popa
-           ret
+print_hex:                        ; Since we are only using this once, do not need
+            mov  bx, HEX_OUT+2    ; Setting ptr to the 2nd 0 in HEX_OUT(0x0000)
+            mov  dl, 
+            
 
 [bits 32]                         ; Now initing 32-bit mode
 init_32:  mov  ax,  DATA_SEG      ; Updating seg registers
