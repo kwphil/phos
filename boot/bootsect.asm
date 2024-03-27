@@ -123,7 +123,7 @@ gdt_data:  dw 0xffff
 
 gdt_end:
 
-gdt_descriptor: dw gdt_end - gdt_start - 1
+gdtdesc:        dw gdt_end - gdt_start - 1
                 dd gdt_start
 
 CODE_SEG equ gdt_code - gdt_start
