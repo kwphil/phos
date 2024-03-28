@@ -20,7 +20,7 @@ void kernel32( void ) {
     // TODO: Create a SHA256 encoder
 
     // TODO: Post the message to quit switch64 for 3 seconds
-    puts("Press 'i' to escape 32bit boot!");
+    puts("Press 'i' to escape 32bit boot!\n");
     // TODO: Check if input = ESCAPE_CODE
     checkC('i')
 }   
