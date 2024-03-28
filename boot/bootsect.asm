@@ -68,10 +68,40 @@ sectors_error:
             hlt
             jmp $
 
-print_hex:                        ; Since we are only using this once, do not need
+print_hex:                        ; Since we are only using this once, do not need to reset HEX_OUT
             mov  ax, HEX_OUT+2    ; Setting ptr to the 2nd 0 in HEX_OUT(0x0000)
-            mov  
-            
+            xor  cx, cx           ; Setting counter to 0
+hex_lp:     shr  dx               ; Pop a bit off of dx
+            jc   hex_add          ; Add 1 to [ax] if needed 
+hex_cmp:    cmp  cx, 4            ; Check if looped 4 times
+            jne  counter_set      ; Set to the next digit
+            inc  cx               ; $cx++
+            cmp  dx, 0            ; Check if dx is cleared
+            jne  hex_check        ; input a-f if needed
+hex_add:    
+            inc  [ax]             ; Add one to [ax]
+            jmp  hex_cmp          ; Go back
+hex_check:
+            mov  ax, HEX_OUT+2    ; set the ptr to the 2nd 0 (0x0000)
+hex_checklp:cmp  [ax], '9'        ; if($ax > '9')               ^
+            jg   hex_addc         ;   goto hex_addc
+            inc  ax               ; $ax++
+            jmp  hex_checklp      ; recurse back to the beginning
+hex_addc:
+            mov  bx, [ax]         ; $bx = $ax
+            add  bx, ('A'-'9'+1)  ; Add the distance from 'A' to ';'(Where 'A' is right now)
+            mov  [ax], bx         ; Put the char back
+            inc  ax               ; $ax++
+            jmp  hex_checklp      ; recurse back to the beginning
+hex_done:   
+            mov  bx, HEX_OUT      ; Move addr to HEX_OUT
+            call print            ; Print it
+            ret                   ; Return
+counter_set:
+            xor  cx, cx           ; cx = 0
+            add  [ax], '0'        ; Make sure the char actually prints correctly
+            inc  ax               ; $ax++
+            jmp  hex_lp           ; go back to hex_lp
 
 [bits 32]                         ; Now initing 32-bit mode
 init_32:  mov  ax,  DATA_SEG      ; Updating seg registers
