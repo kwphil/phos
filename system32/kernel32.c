@@ -1,3 +1,6 @@
+#include "../include/keyboard32.h"
+#include "../include/print32.h"
+
 /*
  *  Kernel32
  *  
@@ -17,6 +20,7 @@ void kernel32( void ) {
     // TODO: Create a SHA256 encoder
 
     // TODO: Post the message to quit switch64 for 3 seconds
-
+    puts("Press 'i' to escape 32bit boot!");
     // TODO: Check if input = ESCAPE_CODE
+    checkC('i')
 }   
