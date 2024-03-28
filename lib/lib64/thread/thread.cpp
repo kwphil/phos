@@ -24,7 +24,7 @@ class thread {
             _stack = (char *)malloc(_stackSize);
         }
 
-        setFunc(void *funcPtr) {
+        void setFunc(void *funcPtr) {
             _funcPtr = funcPtr;
         }
 
