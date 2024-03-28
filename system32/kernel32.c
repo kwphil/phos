@@ -19,5 +19,4 @@ void kernel32( void ) {
     // TODO: Post the message to quit switch64 for 3 seconds
 
     // TODO: Check if input = ESCAPE_CODE
-    if(getc(&c) == 'i') 
 }   
