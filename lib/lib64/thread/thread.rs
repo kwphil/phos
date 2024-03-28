@@ -6,9 +6,9 @@ extern "C" {
 }
 
 struct thread {
-    fork(stack_size: u64, func_ptr: u64) {
+    fork(stack_size: u64, function: fn()) {
         unsafe {
-            create_thread(&func_ptr, malloc(&stack_size));
+            create_thread(&function, malloc(&stack_size));
         }
     }
 }

@@ -1,14 +1,14 @@
-let lib64_loc = "../lib/lib64/";
-let bin_loc   = "../bin/"
+mod lib::lib64::thread::thread
 
-fn kernel( mut table:SystemTable ) {
-    cc::Build::new()
-        .cpp(true)
-        .file(lib64_loc + "thread/thread.cpp")
-        .compile(bin_loc + "thread.cpp.o");
+fn boot64( mut system_table: SystemTable ) {
+    /* Create a new thread for each device with a driver */
+    for i in 0 .. system_table.devices {
+        let curr_device = system_table.devices.get(i);
 
-    /* Create a new thread */
-    unsafe {
-        
+        if curr_device.name.is_empty() {
+            kernel64_error("Failed to get device: %d", i, SystemTable.Status.failure.fatal);
+        }
+
+        thread::Fork(curr_device.driver.size_req, curr_device.driver.func as *());
     }
 }
