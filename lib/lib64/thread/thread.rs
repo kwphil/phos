@@ -6,9 +6,30 @@ extern "C" {
 }
 
 struct thread {
-    fork(stack_size: u64, function: fn()) {
+    let _stack_size: c_size_t = 2048;
+    let _stack: *c_void;
+    let _func: *();
+
+    static fn new(stack_size: u128, function: *()) {
+        _stack_size = stack_size;
+        _stack = malloc(_stack_size);
+        _func = function;
+    }
+
+    static fn new(function: *()) {
+        _stack = malloc(_stack_size);
+        _func = function;
+    }
+
+    fn fork() {
         unsafe {
-            create_thread(&function, malloc(&stack_size));
+            create_thread(&function, malloc(&(_stack_size as c_size_t)));
+        }
+    }
+
+    static fn Fork(stack_size: u128, function: *()) {
+        unsafe {
+            create_thread(&function, malloc(&(stack_size as c_size_t)));
         }
     }
 }
